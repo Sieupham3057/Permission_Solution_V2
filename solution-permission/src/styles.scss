@@ -1,0 +1,718 @@
+$form-feedback-valid-color: #28a745; // green
+$form-feedback-invalid-color: #dc3545; // red
+$input-focus-width: 2px;
+$input-focus-box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+$input-height: 40px;
+$input-height-inner: 30px;
+$input-height-inner-quarter: 7px;
+$input-height-inner-half: 15px;
+$input-focus-color: #495057;
+$input-focus-bg: #f8f9fa;
+$input-focus-border-color: #007bff;
+$enable-shadows: true; // Enable shadows
+// Define box-shadow variables
+$input-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); // General input shadow
+$input-focus-box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); // Shadow when input is focused
+
+:root {
+    --bs-breakpoint-xs: 0;
+    --bs-breakpoint-sm: 576px;
+    --bs-breakpoint-md: 768px;
+    --bs-breakpoint-lg: 992px;
+    --bs-breakpoint-xl: 1200px;
+    --bs-breakpoint-xxl: 1400px;
+
+    --bs-blue: #0d6efd;
+    --bs-indigo: #6610f2;
+    --bs-purple: #6f42c1;
+    --bs-pink: #d63384;
+    --bs-red: #dc3545;
+    --bs-orange: #fd7e14;
+    --bs-yellow: #ffc107;
+    --bs-green: #198754;
+    --bs-teal: #20c997;
+    --bs-cyan: #0dcaf0;
+    --bs-black: #000;
+    --bs-white: #fff;
+    --bs-gray: #6c757d;
+    --bs-gray-dark: #343a40;
+    --bs-gray-100: #f8f9fa;
+    --bs-gray-200: #e9ecef;
+    --bs-gray-300: #dee2e6;
+    --bs-gray-400: #ced4da;
+    --bs-gray-500: #adb5bd;
+    --bs-gray-600: #6c757d;
+    --bs-gray-700: #495057;
+    --bs-gray-800: #343a40;
+    --bs-gray-900: #212529;
+    --bs-primary: #0d6efd;
+    --bs-secondary: #6c757d;
+    --bs-success: #198754;
+    --bs-info: #0dcaf0;
+    --bs-warning: #ffc107;
+    --bs-danger: #dc3545;
+    --bs-light: #f8f9fa;
+    --bs-dark: #212529;
+    --bs-primary-rgb: 13, 110, 253;
+    --bs-secondary-rgb: 108, 117, 125;
+    --bs-success-rgb: 25, 135, 84;
+    --bs-info-rgb: 13, 202, 240;
+    --bs-warning-rgb: 255, 193, 7;
+    --bs-danger-rgb: 220, 53, 69;
+    --bs-light-rgb: 248, 249, 250;
+    --bs-dark-rgb: 33, 37, 41;
+    --bs-primary-text-emphasis: rgb(5.2, 44, 101.2);
+    --bs-secondary-text-emphasis: rgb(43.2, 46.8, 50);
+    --bs-success-text-emphasis: rgb(10, 54, 33.6);
+    --bs-info-text-emphasis: rgb(5.2, 80.8, 96);
+    --bs-warning-text-emphasis: rgb(102, 77.2, 2.8);
+    --bs-danger-text-emphasis: rgb(88, 21.2, 27.6);
+    --bs-light-text-emphasis: #495057;
+    --bs-dark-text-emphasis: #495057;
+    --bs-primary-bg-subtle: rgb(206.6, 226, 254.6);
+    --bs-secondary-bg-subtle: rgb(225.6, 227.4, 229);
+    --bs-success-bg-subtle: rgb(209, 231, 220.8);
+    --bs-info-bg-subtle: rgb(206.6, 244.4, 252);
+    --bs-warning-bg-subtle: rgb(255, 242.6, 205.4);
+    --bs-danger-bg-subtle: rgb(248, 214.6, 217.8);
+    --bs-light-bg-subtle: rgb(251.5, 252, 252.5);
+    --bs-dark-bg-subtle: #ced4da;
+    --bs-primary-border-subtle: rgb(158.2, 197, 254.2);
+    --bs-secondary-border-subtle: rgb(196.2, 199.8, 203);
+    --bs-success-border-subtle: rgb(163, 207, 186.6);
+    --bs-info-border-subtle: rgb(158.2, 233.8, 249);
+    --bs-warning-border-subtle: rgb(255, 230.2, 155.8);
+    --bs-danger-border-subtle: rgb(241, 174.2, 180.6);
+    --bs-light-border-subtle: #e9ecef;
+    --bs-dark-border-subtle: #adb5bd;
+    --bs-white-rgb: 255, 255, 255;
+    --bs-black-rgb: 0, 0, 0;
+    --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    --bs-body-font-family: var(--bs-font-sans-serif);
+    --bs-body-font-size: 1rem;
+    --bs-body-font-weight: 400;
+    --bs-body-line-height: 1.5;
+    --bs-body-color: #212529;
+    --bs-body-color-rgb: 33, 37, 41;
+    --bs-body-bg: #fff;
+    --bs-body-bg-rgb: 255, 255, 255;
+    --bs-emphasis-color: #000;
+    --bs-emphasis-color-rgb: 0, 0, 0;
+    --bs-secondary-color: rgba(33, 37, 41, 0.75);
+    --bs-secondary-color-rgb: 33, 37, 41;
+    --bs-secondary-bg: #e9ecef;
+    --bs-secondary-bg-rgb: 233, 236, 239;
+    --bs-tertiary-color: rgba(33, 37, 41, 0.5);
+    --bs-tertiary-color-rgb: 33, 37, 41;
+    --bs-tertiary-bg: #f8f9fa;
+    --bs-tertiary-bg-rgb: 248, 249, 250;
+    --bs-heading-color: inherit;
+    --bs-link-color: #0d6efd;
+    --bs-link-color-rgb: 13, 110, 253;
+    --bs-link-decoration: underline;
+    --bs-link-hover-color: rgb(10.4, 88, 202.4);
+    --bs-link-hover-color-rgb: 10, 88, 202;
+    --bs-code-color: #d63384;
+    --bs-highlight-color: #212529;
+    --bs-highlight-bg: rgb(255, 242.6, 205.4);
+    --bs-border-width: 1px;
+    --bs-border-style: solid;
+    --bs-border-color: #dee2e6;
+    --bs-border-color-translucent: rgba(0, 0, 0, 0.175);
+    --bs-border-radius: 0.375rem;
+    --bs-border-radius-sm: 0.25rem;
+    --bs-border-radius-lg: 0.5rem;
+    --bs-border-radius-xl: 1rem;
+    --bs-border-radius-xxl: 2rem;
+    --bs-border-radius-2xl: var(--bs-border-radius-xxl);
+    --bs-border-radius-pill: 50rem;
+    --bs-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --bs-box-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --bs-box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+    --bs-box-shadow-inset: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+    --bs-focus-ring-width: 0.25rem;
+    --bs-focus-ring-opacity: 0.25;
+    --bs-focus-ring-color: rgba(13, 110, 253, 0.25);
+    --bs-form-valid-color: #198754;
+    --bs-form-valid-border-color: #198754;
+    --bs-form-invalid-color: #dc3545;
+    --bs-form-invalid-border-color: #dc3545;
+}
+
+body,
+html {
+    height: 100%
+}
+
+html[dir="rtl"] {
+    .app-component {
+        .navbar {
+            @media (min-width: 992px) {
+                .ms-lg-auto {
+                    margin-left: 0.5rem !important;
+                }
+
+                .me-lg-2 {
+                    margin-right: auto !important;
+                }
+            }
+        }
+    }
+
+    .login-container {
+        .btn-social.me-1 {
+            margin-right: 0 !important;
+            margin-left: 0.25rem !important;
+        }
+    }
+}
+
+.reduced-font {
+    font-size: 0.875rem;
+}
+
+// ============ Angular Validation ==============
+
+input.form-control.left-status,
+textarea.form-control.left-status,
+.ng-select.form-control.left-status {
+    border-left-width: 5px !important;
+}
+
+.ng-valid[required],
+.ng-valid.required {
+    border-left: 5px solid $form-feedback-valid-color !important;
+}
+
+.ng-invalid:not(form) {
+    border-left: 5px solid $form-feedback-invalid-color !important;
+}
+
+.is-valid {
+    .ng-select.form-control {
+        border-color: $form-feedback-valid-color !important;
+
+        &.ng-select-focused {
+            border-color: $form-feedback-valid-color !important;
+            box-shadow: 0 0 0 $input-focus-width rgba($form-feedback-valid-color, .25) !important;
+        }
+
+        padding-right: $input-height-inner !important;
+        background-repeat: no-repeat !important;
+        background-position: right $input-height-inner-quarter center !important;
+        background-size: $input-height-inner-half $input-height-inner-half !important;
+    }
+}
+
+.is-invalid {
+    .ng-select.form-control {
+        border-color: $form-feedback-invalid-color !important;
+
+        &.ng-select-focused {
+            border-color: $form-feedback-invalid-color !important;
+            box-shadow: 0 0 0 $input-focus-width rgba($form-feedback-invalid-color, .25) !important;
+        }
+
+        padding-right: $input-height-inner !important;
+        background-repeat: no-repeat !important;
+        background-position: right $input-height-inner-quarter center !important;
+        background-size: $input-height-inner-half $input-height-inner-half !important;
+    }
+}
+
+.ng-select {
+    &.form-control {
+        padding: 0;
+        height: unset !important;
+        min-height: $input-height !important;
+
+        .ng-select-container {
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        &.ng-select-focused {
+            color: $input-focus-color !important;
+            background-color: $input-focus-bg !important;
+            border-color: $input-focus-border-color !important;
+            outline: 0 !important;
+
+            // Avoid using mixin so we can pass custom focus shadow properly
+            @if $enable-shadows {
+                box-shadow: $input-box-shadow, $input-focus-box-shadow !important;
+            }
+
+            @else {
+                box-shadow: $input-focus-box-shadow !important;
+            }
+        }
+    }
+
+
+    &.pill-items {
+        .ng-value-container .ng-value {
+            background-color: inherit !important;
+        }
+
+        .ng-value-icon.right {
+            border-left: none !important;
+            padding: 1px 0 1px 3px !important;
+            font-weight: lighter !important
+        }
+
+        .ng-value-icon:hover {
+            background-color: inherit !important;
+            font-weight: bold !important;
+        }
+
+        .ng-option {
+            .badge-pill {
+                max-width: 95% !important;
+            }
+        }
+
+        .ng-option-selected {
+            .fa.fa-check {
+                position: absolute !important;
+                right: 15px !important;
+                display: inline-block !important;
+            }
+        }
+    }
+
+    &.theme-picker {
+        .theme-item {
+            text-align: center !important;
+        }
+
+        .ng-select-container .ng-value-container,
+        .ng-select-container .ng-value-container .ng-value {
+            width: 100% !important;
+        }
+    }
+}
+
+// ============ Angular Validation ==============
+
+.dropdown-toggle.btn-light {
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+.modal.login-control {
+    .modal-content {
+        border: none;
+        background-color: transparent;
+
+        .modal-body {
+            padding: 0;
+        }
+    }
+}
+
+.disabledContainer {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.pageHeader {
+    margin-top: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+i.page-caption {
+    vertical-align: baseline;
+    font-size: 1.2em;
+}
+
+.alertify {
+    top: 75px;
+}
+
+.alertify-message {
+    font-size: 1.1rem;
+}
+
+#toasta.toasta-position-top-right {
+    top: 40px;
+    right: 20px;
+}
+
+#toasta .toast.toasta-theme-bootstrap {
+    font-size: 0.9em;
+}
+
+#toasta .toast.toasta-theme-bootstrap .toast-text .toast-title {
+    font-size: 1.02em;
+}
+
+#toasta .toast-text .toast-msg {
+    max-width: 1000px;
+    max-height: 800px;
+    display: inline-block;
+    white-space: pre-wrap;
+    overflow: auto;
+}
+
+///*-webkit-filter: blur(5px) grayscale(90%);*/
+///*body.modal-open .container {
+//    -webkit-filter: blur(1px);
+//    -moz-filter: blur(1px);
+//    -o-filter: blur(1px);
+//    -ms-filter: blur(1px);
+//    filter: blur(1px);
+//    filter: url("https://gist.githubusercontent.com/amitabhaghosh197/b7865b409e835b5a43b5/raw/1a255b551091924971e7dee8935fd38a7fdf7311/blur".svg#blur);
+//    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='1');
+//}*/
+.vertical-center-flex {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+}
+
+///*Hack stop get ngx-datatable width to be full when inside bootstrap tab control*/
+//.tab-pane .datatable-scroll {
+//    width: 100% !important;
+//}
+
+.popover.notifications-popup {
+    min-width: 280px;
+
+    .popover-body {
+        padding: 0 !important;
+    }
+}
+
+.ngx-datatable.scroll-vertical {
+    height: 64vh;
+}
+
+.black-anchor {
+    color: #333;
+}
+
+.icon-addon .form-control {
+    border-radius: 25px;
+}
+
+.icon-addon {
+    position: relative;
+    color: #555;
+    display: block;
+}
+
+.icon-addon:after,
+.icon-addon:before {
+    display: table;
+    content: " ";
+}
+
+.icon-addon:after {
+    clear: both;
+}
+
+.icon-addon.addon-md .fa,
+.icon-addon .fa {
+    position: absolute;
+    z-index: 2;
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+    padding: 10px 0;
+    top: 1px;
+}
+
+.icon-addon .fa.left-icon {
+    left: 10px;
+    margin-left: -2.5px;
+}
+
+.icon-addon .fa.right-icon {
+    right: 10px;
+    margin-right: -2.5px;
+}
+
+.icon-addon.addon-lg .form-control {
+    line-height: 1.33;
+    height: 46px;
+    font-size: 18px;
+}
+
+.icon-addon.addon-lg .form-control.left-icon {
+    padding-top: 10px;
+    padding-right: 16px;
+    padding-bottom: 10px;
+    padding-left: 40px !important;
+}
+
+.icon-addon.addon-lg .form-control.right-icon {
+    padding-top: 10px;
+    padding-right: 40px !important;
+    padding-bottom: 10px;
+    padding-left: 16px;
+}
+
+.icon-addon.addon-sm .form-control {
+    height: 30px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.icon-addon.addon-sm .form-control.left-icon {
+    padding-top: 5px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    padding-left: 28px !important;
+}
+
+.icon-addon.addon-sm .form-control.right-icon {
+    padding-top: 5px;
+    padding-right: 28px !important;
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
+
+.form-control {
+    border-radius: var(--bs-border-radius) !important;
+}
+
+.form-control:focus {
+    border-color: rgb(134, 182.5, 254) !important;
+    outline: 0 !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}
+
+.icon-addon.addon-lg .fa {
+    font-size: 18px;
+    top: 4px;
+}
+
+.icon-addon.addon-lg .fa.left-icon {
+    margin-left: 0;
+    left: 11px;
+}
+
+.icon-addon.addon-lg .fa.right-icon {
+    margin-right: 0;
+    right: 11px;
+}
+
+.icon-addon.addon-md .form-control,
+.icon-addon .form-control {
+    font-weight: normal;
+}
+
+.icon-addon.addon-md .form-control.left-icon,
+.icon-addon .form-control.left-icon {
+    float: left;
+    padding-left: 30px;
+}
+
+.icon-addon.addon-md .form-control.right-icon,
+.icon-addon .form-control.right-icon {
+    float: right;
+    padding-right: 30px;
+}
+
+.icon-addon.addon-sm .fa {
+    font-size: 12px;
+    top: -1px;
+}
+
+.icon-addon.addon-sm .fa.left-icon,
+.icon-addon.addon-sm .glyphicon.left-icon {
+    margin-left: 0;
+    left: 5px;
+}
+
+.icon-addon.addon-sm .fa.right-icon,
+.icon-addon.addon-sm .glyphicon.right-icon {
+    margin-right: 0;
+    right: 5px;
+}
+
+.icon-addon .form-control:focus+.glyphicon,
+.icon-addon:hover .glyphicon,
+.icon-addon .form-control:focus+.fa,
+.icon-addon:hover .fa {
+    color: #2580db;
+}
+
+.clear-input {
+    text-decoration: none !important;
+    color: #b3b3b3 !important;
+}
+
+.clear-input:hover {
+    color: #2580db !important;
+}
+
+a.text-link,
+.btn-link.text-link {
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.text-link a {
+    text-decoration: none;
+
+    &:hover:not(.btn):not(.card-link) {
+        text-decoration: underline;
+    }
+}
+
+.fs-sm {
+    font-size: 0.75rem !important;
+}
+
+.hr-separator {
+    opacity: 0.125
+}
+
+
+/* Bootstrap 5 tweak: do not underline links unless hovered over */
+/*a:not([class*="btn"]) {
+  text-decoration: none;
+}
+
+a:not([class*="btn"]):hover {
+  text-decoration: underline;
+}*/
+
+/* Overall container for ng-select */
+ng-select {
+    width: 100%;
+    font-family: 'Arial', sans-serif;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Add a subtle shadow for depth */
+}
+
+/* Styling the input box */
+ng-select .ng-select-container {
+    //padding: 10px 15px;
+    border: 2px solid #ddd;
+    /* Light gray border */
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for input box */
+ng-select .ng-select-container:hover {
+    border-color: rgb(234.6, 244.68, 255);
+    /* Blue border on hover */
+    background-color: #ffffff;
+}
+
+/* Focus effect for input box */
+ng-select .ng-select-container.ng-select-focused {
+    border-color: rgb(234.6, 244.68, 255);
+    /* Blue border when focused */
+    box-shadow: 0 0 5px rgba(93, 155, 252, 0.6);
+    /* Add a soft glow around the input */
+}
+
+/* Remove the clear button from selected items */
+ng-select .ng-select-container .ng-value .ng-clear {
+    display: none;
+}
+
+/* Styling the selected items in the input */
+ng-select .ng-select-container .ng-value {
+    background-color: rgb(234.6, 244.68, 255);
+    /* Blue background for selected items */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 25px;
+    margin: 0 5px 0 0;
+    font-size: 14px;
+}
+
+/* Hover effect for selected items */
+ng-select .ng-select-container .ng-value:hover {
+    background-color: rgb(234.6, 244.68, 255);
+}
+
+/* Dropdown panel customization */
+ng-select .ng-dropdown-panel {
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Styling the options inside the dropdown */
+ng-select .ng-dropdown-panel .ng-option {
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #555;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for options */
+ng-select .ng-dropdown-panel .ng-option:hover {
+    background-color: rgb(234.6, 244.68, 255);
+    color: #fff;
+}
+
+/* Styling the selected option inside the dropdown */
+ng-select .ng-dropdown-panel .ng-option.ng-option-selected {
+    background-color: rgb(234.6, 244.68, 255);
+    color: white;
+    font-weight: bold;
+}
+
+/* Badge style for selected items in the input */
+.ng-value {
+    background-color: rgb(234.6, 244.68, 255);
+    /* Blue badge */
+    color: white;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    margin-right: 5px;
+}
+
+/* Remove clear icon from badge */
+.ng-value-icon.right {
+    margin-left: 10px !important;
+    cursor: pointer;
+}
+
+/* Badge hover effect */
+.ng-value:hover {
+    background-color: rgb(234.6, 244.68, 255);
+    /* Lighter blue on hover */
+}
+
+/* Styling the custom options in the dropdown */
+.ng-dropdown-panel .ng-option .badge {
+    background-color: #f1f1f1;
+    color: #333;
+    font-size: 14px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+/* Option selected checkmark icon styling */
+.ng-dropdown-panel .ng-option.ng-option-selected .fa-check {
+    color: white;
+    font-size: 16px;
+    margin-left: 10px;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
