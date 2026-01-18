@@ -13,178 +13,178 @@ namespace Permission.API.Controllers.V1;
 
 public class UserRoleController : BaseApiController
 {
-	private readonly IUserRoleService _userRoleService;
-	private readonly IAuthorizationService _authorizationService;
+    private readonly IUserRoleService _userRoleService;
+    private readonly IAuthorizationService _authorizationService;
 
-	public UserRoleController(ILogger<UserRoleController> logger, IMapper mapper,
-		IUserRoleService userRoleService, IAuthorizationService authorizationService) : base(logger, mapper)
-	{
-		_userRoleService = userRoleService;
-		_authorizationService = authorizationService;
-	}
+    public UserRoleController(ILogger<UserRoleController> logger, IMapper mapper,
+        IUserRoleService userRoleService, IAuthorizationService authorizationService) : base(logger, mapper)
+    {
+        _userRoleService = userRoleService;
+        _authorizationService = authorizationService;
+    }
 
-	[HttpGet("roles/{id}", Name = nameof(GetRoleById))]
-	[ProducesResponseType(200, Type = typeof(RoleVM))]
-	[ProducesResponseType(403)]
-	[ProducesResponseType(404)]
-	public async Task<IActionResult> GetRoleById(Guid id)
-	{
-		var appRole = await _userRoleService.GetRoleByIdAsync(id)
-			?? throw new UserRoleNotFoundException(id);
+    [HttpGet("roles/{id}", Name = nameof(GetRoleById))]
+    [ProducesResponseType(200, Type = typeof(RoleVM))]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetRoleById(Guid id)
+    {
+        var appRole = await _userRoleService.GetRoleByIdAsync(id)
+            ?? throw new UserRoleNotFoundException(id);
 
-		if (!(await _authorizationService.AuthorizeAsync(User, appRole.Name, AuthPolicies.ViewRoleByRoleNamePolicy)).Succeeded)
-			// Default app redirect to action "Account/AccessDenied", detail: 'https://localhost:7046/Account/AccessDenied?ReturnUrl=%2Fapi%2Fv1%2FUserRole%2Froles%2Fname%2F{nameValue}'
-			// This belong cookies rule event we don't use. => Should throw Exception and catch handle that at globalexceptionHandler because custome redirect in cookie is not working
-			//return Forbid(); 
-			throw new ForbiddenException($"Role with name: {appRole.Name} don't have permission.");
+        if (!(await _authorizationService.AuthorizeAsync(User, appRole.Name, AuthPolicies.ViewRoleByRoleNamePolicy)).Succeeded)
+            // Default app redirect to action "Account/AccessDenied", detail: 'https://localhost:7046/Account/AccessDenied?ReturnUrl=%2Fapi%2Fv1%2FUserRole%2Froles%2Fname%2F{nameValue}'
+            // This belong cookies rule event we don't use. => Should throw Exception and catch handle that at globalexceptionHandler because custome redirect in cookie is not working
+            //return Forbid();
+            throw new ForbiddenException($"Role with name: {appRole.Name} don't have permission.");
 
-		var roleVM = appRole != null ? await GetRoleViewModelHelper(appRole.Name!) : null;
+        var roleVM = appRole != null ? await GetRoleViewModelHelper(appRole.Name!) : null;
 
-		if (roleVM != null)
-			return Ok(roleVM);
+        if (roleVM != null)
+            return Ok(roleVM);
 
-		return NotFound(id);
-	}
+        return NotFound(id);
+    }
 
-	[HttpGet("roles/name/{name}")]
-	[ProducesResponseType(200, Type = typeof(RoleVM))]
-	[ProducesResponseType(403)]
-	[ProducesResponseType(404)]
-	public async Task<IActionResult> GetRoleByName(string name)
-	{
-		if (!(await _authorizationService.AuthorizeAsync(User, name, AuthPolicies.ViewRoleByRoleNamePolicy)).Succeeded)
-			// Default app redirect to action "Account/AccessDenied", detail: 'https://localhost:7046/Account/AccessDenied?ReturnUrl=%2Fapi%2Fv1%2FUserRole%2Froles%2Fname%2F{nameValue}'
-			// This belong cookies rule event we don't use. => Should throw Exception and catch handle that at globalexceptionHandler because custome redirect in cookie is not working
-			//return Forbid(); 
-			throw new ForbiddenException($"Role with name: {name} don't have permission.");
+    [HttpGet("roles/name/{name}")]
+    [ProducesResponseType(200, Type = typeof(RoleVM))]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetRoleByName(string name)
+    {
+        if (!(await _authorizationService.AuthorizeAsync(User, name, AuthPolicies.ViewRoleByRoleNamePolicy)).Succeeded)
+            // Default app redirect to action "Account/AccessDenied", detail: 'https://localhost:7046/Account/AccessDenied?ReturnUrl=%2Fapi%2Fv1%2FUserRole%2Froles%2Fname%2F{nameValue}'
+            // This belong cookies rule event we don't use. => Should throw Exception and catch handle that at globalexceptionHandler because custome redirect in cookie is not working
+            //return Forbid();
+            throw new ForbiddenException($"Role with name: {name} don't have permission.");
 
-		var roleVM = await GetRoleViewModelHelper(name);
+        var roleVM = await GetRoleViewModelHelper(name);
 
-		if (roleVM != null)
-			return Ok(roleVM);
+        if (roleVM != null)
+            return Ok(roleVM);
 
-		return NotFound(name);
-	}
+        return NotFound(name);
+    }
 
-	[HttpGet("roles")]
-	[Authorize(AuthPolicies.ViewAllRolesPolicy)]
-	[ProducesResponseType(200, Type = typeof(List<RoleVM>))]
-	public async Task<IActionResult> GetRoles()
-	{
-		return await GetRoles(-1, -1);
-	}
+    [HttpGet("roles")]
+    [Authorize(AuthPolicies.ViewAllRolesPolicy)]
+    [ProducesResponseType(200, Type = typeof(List<RoleVM>))]
+    public async Task<IActionResult> GetRoles()
+    {
+        return await GetRoles(-1, -1);
+    }
 
-	[HttpGet("roles/{pageNumber:int}/{pageSize:int}")]
-	[Authorize(AuthPolicies.ViewAllRolesPolicy)]
-	[ProducesResponseType(200, Type = typeof(List<RoleVM>))]
-	public async Task<IActionResult> GetRoles(int pageNumber, int pageSize)
-	{
-		var roles = await _userRoleService.GetRolesLoadRelatedAsync(pageNumber, pageSize);
-		return Ok(_mapper.Map<List<RoleVM>>(roles));
-	}
+    [HttpGet("roles/{pageNumber:int}/{pageSize:int}")]
+    [Authorize(AuthPolicies.ViewAllRolesPolicy)]
+    [ProducesResponseType(200, Type = typeof(List<RoleVM>))]
+    public async Task<IActionResult> GetRoles(int pageNumber, int pageSize)
+    {
+        var roles = await _userRoleService.GetRolesLoadRelatedAsync(pageNumber, pageSize);
+        return Ok(_mapper.Map<List<RoleVM>>(roles));
+    }
 
-	[HttpPut("roles/{id}")]
-	[Authorize(AuthPolicies.ManageAllRolesPolicy)]
-	[ProducesResponseType(204)]
-	[ProducesResponseType(400)]
-	[ProducesResponseType(404)]
-	public async Task<IActionResult> UpdateRole(Guid id, [FromBody] RoleVM role)
-	{
-		if (role == null)
-			return BadRequest($"{nameof(role)} cannot be null");
+    [HttpPut("roles/{id}")]
+    [Authorize(AuthPolicies.ManageAllRolesPolicy)]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> UpdateRole(Guid id, [FromBody] RoleVM role)
+    {
+        if (role == null)
+            return BadRequest($"{nameof(role)} cannot be null");
 
-		var appRole = await _userRoleService.GetRoleByIdAsync(id);
+        var appRole = await _userRoleService.GetRoleByIdAsync(id);
 
-		if (appRole == null)
-			return NotFound(id);
+        if (appRole == null)
+            return NotFound(id);
 
-		if (role.Id is not null && id != role.Id)
-			return BadRequest("Conflicting role id in parameter and model data");
+        if (role.Id is not null && id != role.Id)
+            return BadRequest("Conflicting role id in parameter and model data");
 
-		_mapper.Map(role, appRole);
+        _mapper.Map(role, appRole);
 
-		var result = await _userRoleService.UpdateRoleAsync(appRole, role.Permissions?.Select(p => p.Value!).ToArray());
+        var result = await _userRoleService.UpdateRoleAsync(appRole, role.Permissions?.Select(p => p.Value!).ToArray());
 
-		if (result.Succeeded)
-			return NoContent();
+        if (result.Succeeded)
+            return NoContent();
 
-		AddModelError(result.Errors);
+        AddModelError(result.Errors);
 
-		return BadRequest(ModelState);
-	}
+        return BadRequest(ModelState);
+    }
 
-	[HttpPost("roles")]
-	[Authorize(AuthPolicies.ManageAllRolesPolicy)]
-	[ProducesResponseType(201, Type = typeof(RoleVM))]
-	[ProducesResponseType(400)]
-	public async Task<IActionResult> CreateRole([FromBody] RoleVM role)
-	{
-		if (role == null)
-			return BadRequest($"{nameof(role)} cannot be null");
+    [HttpPost("roles")]
+    [Authorize(AuthPolicies.ManageAllRolesPolicy)]
+    [ProducesResponseType(201, Type = typeof(RoleVM))]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> CreateRole([FromBody] RoleVM role)
+    {
+        if (role == null)
+            return BadRequest($"{nameof(role)} cannot be null");
 
-		var appRole = _mapper.Map<ApplicationRole>(role);
+        var appRole = _mapper.Map<ApplicationRole>(role);
 
-		var result = await _userRoleService.CreateRoleAsync(appRole, role.Permissions?.Select(p => p.Value!).ToArray() ?? []);
+        var result = await _userRoleService.CreateRoleAsync(appRole, role.Permissions?.Select(p => p.Value!).ToArray() ?? []);
 
-		if (result.Succeeded)
-		{
-			var roleVM = await GetRoleViewModelHelper(appRole.Name!);
-			return CreatedAtAction(nameof(GetRoleById), new { id = roleVM?.Id }, roleVM);
-		}
+        if (result.Succeeded)
+        {
+            var roleVM = await GetRoleViewModelHelper(appRole.Name!);
+            return CreatedAtAction(nameof(GetRoleById), new { id = roleVM?.Id }, roleVM);
+        }
 
-		AddModelError(result.Errors);
+        AddModelError(result.Errors);
 
-		return BadRequest(ModelState);
-	}
+        return BadRequest(ModelState);
+    }
 
-	[HttpDelete("roles/{id}")]
-	[Authorize(AuthPolicies.ManageAllRolesPolicy)]
-	[ProducesResponseType(200, Type = typeof(RoleVM))]
-	[ProducesResponseType(400)]
-	[ProducesResponseType(404)]
-	public async Task<IActionResult> DeleteRole(Guid id)
-	{
-		var appRole = await _userRoleService.GetRoleByIdAsync(id);
+    [HttpDelete("roles/{id}")]
+    [Authorize(AuthPolicies.ManageAllRolesPolicy)]
+    [ProducesResponseType(200, Type = typeof(RoleVM))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> DeleteRole(Guid id)
+    {
+        var appRole = await _userRoleService.GetRoleByIdAsync(id);
 
-		if (appRole == null)
-			return NotFound(id);
+        if (appRole == null)
+            return NotFound(id);
 
-		var canDelete = await _userRoleService.TestCanDeleteRoleAsync(id);
-		if (!canDelete.Success)
-		{
-			AddModelError($"Role \"{appRole.Name}\" cannot be deleted at this time. " + "Delete the associated records and try again");
-			AddModelError(canDelete.Errors, "Records");
-		}
+        var canDelete = await _userRoleService.TestCanDeleteRoleAsync(id);
+        if (!canDelete.Success)
+        {
+            AddModelError($"Role \"{appRole.Name}\" cannot be deleted at this time. " + "Delete the associated records and try again");
+            AddModelError(canDelete.Errors, "Records");
+        }
 
-		if (ModelState.IsValid)
-		{
-			var roleVM = await GetRoleViewModelHelper(appRole.Name!, false);
-			var result = await _userRoleService.DeleteRoleAsync(appRole);
+        if (ModelState.IsValid)
+        {
+            var roleVM = await GetRoleViewModelHelper(appRole.Name!, false);
+            var result = await _userRoleService.DeleteRoleAsync(appRole);
 
-			if (!result.Succeeded)
-				throw new UserRoleException($"The following errors occurred whilst deleting role \"{id}\": " + $"{string.Join(", ", result.Errors)}");
+            if (!result.Succeeded)
+                throw new UserRoleException($"The following errors occurred whilst deleting role \"{id}\": " + $"{string.Join(", ", result.Errors)}");
 
-			return Ok(roleVM);
-		}
+            return Ok(roleVM);
+        }
 
-		return BadRequest(ModelState);
-	}
+        return BadRequest(ModelState);
+    }
 
-	[HttpGet("permissions")]
-	[Authorize(AuthPolicies.ViewAllRolesPolicy)]
-	[ProducesResponseType(200, Type = typeof(List<PermissionVM>))]
-	public IActionResult GetAllPermissions()
-	{
-		return Ok(_mapper.Map<List<PermissionVM>>(ApplicationPermissions.AllPermissions));
-	}
+    [HttpGet("permissions")]
+    [Authorize(AuthPolicies.ViewAllRolesPolicy)]
+    [ProducesResponseType(200, Type = typeof(List<PermissionVM>))]
+    public IActionResult GetAllPermissions()
+    {
+        return Ok(_mapper.Map<List<PermissionVM>>(ApplicationPermissions.AllPermissions));
+    }
 
-	private async Task<RoleVM?> GetRoleViewModelHelper(string roleName, bool loadRelatedEntities = true)
-	{
-		var role = loadRelatedEntities ? await _userRoleService.GetRoleLoadRelatedAsync(roleName) : await _userRoleService.GetRoleByNameAsync(roleName);
+    private async Task<RoleVM?> GetRoleViewModelHelper(string roleName, bool loadRelatedEntities = true)
+    {
+        var role = loadRelatedEntities ? await _userRoleService.GetRoleLoadRelatedAsync(roleName) : await _userRoleService.GetRoleByNameAsync(roleName);
 
-		if (role != null)
-			return _mapper.Map<RoleVM>(role);
+        if (role != null)
+            return _mapper.Map<RoleVM>(role);
 
-		return null;
-	}
+        return null;
+    }
 }

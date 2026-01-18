@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\Authorization\Authorization.csproj" />
     <ProjectReference Include="..\Permission.Application\Permission.Application.csproj" />
     <ProjectReference Include="..\Permission.Domain\Permission.Domain.csproj" />
     <ProjectReference Include="..\Permission.Infrastructure\Permission.Infrastructure.csproj" />
