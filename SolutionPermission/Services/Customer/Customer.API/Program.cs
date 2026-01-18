@@ -1,5 +1,7 @@
-﻿using Authorization.Claims;
+﻿using Authorization;
+using Authorization.Claims;
 using Authorization.Handlers;
+using Contracts;
 using Customer.API.AttributeAndFilters;
 using Customer.API.Authorization;
 using Customer.Application.DependencyInjection;
@@ -12,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,32 +30,68 @@ builder.Services.AddCustomerApplication();
 // ================== AUTHENTICATION ==================
 
 builder.Services
-    .AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.Authority = "http://172.28.225.131:8080/realms/company-dev";
+        options.RequireHttpsMetadata = false; // DEV only (prod dùng https)
+
+        // QUAN TRỌNG:
+        // Keycloak token của bạn aud = "account", azp = "angular-spa"
+        // Nhưng API nên có audience riêng (ví dụ: customer-api). Tạm thời để false để bạn chạy được trước,
+        // rồi mình sẽ hướng dẫn set audience chuẩn ở Cách B phía dưới.
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidateAudience = true,
+            ValidIssuer = "http://172.28.225.131:8080/realms/company-dev",
+
+            ValidateAudience = false, // tạm thời (prod nên bật và cấu hình audience đúng)
             ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
 
-            ValidIssuer = builder.Configuration["JwtOption:Issuer"],
-            ValidAudience = builder.Configuration["JwtOption:Audience"],
+            NameClaimType = "preferred_username",
+            RoleClaimType = ClaimTypes.Role,
 
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(
-                    builder.Configuration["JwtOption:SecretKey"]!
-                )),
+            ClockSkew = TimeSpan.Zero
+        };
 
-            ClockSkew = TimeSpan.Zero, // ❗ tránh lệch giờ
+        // Tắt mapping mặc định để đỡ bị "http://schemas..." rối
+        options.MapInboundClaims = false;
 
-            NameClaimType = ClaimTypes.Name,
-            RoleClaimType = ClaimTypes.Role // ✅ QUAN TRỌNG
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = context =>
+            {
+                if (context.Principal?.Identity is not ClaimsIdentity identity)
+                    return Task.CompletedTask;
+
+                // resource_access thường là 1 claim dạng JSON string
+                var resourceAccess = context.Principal.FindFirst("resource_access")?.Value;
+
+                if (string.IsNullOrWhiteSpace(resourceAccess))
+                    return Task.CompletedTask;
+
+                var roles = KeycloakRoleExtractor.GetClientRolesFromResourceAccessJson(
+                    resourceAccess,
+                    clientId: "angular-spa"
+                );
+
+                // ✅ Case sensitivity
+                //foreach (var r in roles.Distinct(StringComparer.OrdinalIgnoreCase))
+                //{
+                //    // Reuse toàn bộ code policy/handler hiện tại
+                //    identity.AddClaim(new Claim(CustomClaims.Permission, r));
+                //    identity.AddClaim(new Claim(ClaimTypes.Role, r));
+                //}
+
+                // Convert to normal "ex: Customers.Read => customer.read"
+                foreach (var r in roles.Select(StringHelper.NormalizePermission).Distinct()) // ✅ normalize trước --> ✅ distinct sau
+                {
+                    identity.AddClaim(new Claim(CustomClaims.Permission, r));
+                    identity.AddClaim(new Claim(ClaimTypes.Role, r));
+                }
+
+                return Task.CompletedTask;
+            }
         };
     });
 

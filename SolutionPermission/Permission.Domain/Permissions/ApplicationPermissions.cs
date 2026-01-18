@@ -9,21 +9,21 @@ public static class ApplicationPermissions
     /************* USER PERMISSIONS *************/
 
     public static readonly ApplicationPermission ReadUsers = new(
-        $"{ActionType.Read} {Functions.Users}",// "View Users",
-        $"{Functions.Users}.{ActionType.Read}",// "Users.View",
+        $"{ActionType.Read} {Functions.Users}",// "Read Users",
+        $"{Functions.Users}.{ActionType.Read}",// "users.read",
         Functions.UsersGroupName,
         Functions.UsersViewDes);
 
     public static readonly ApplicationPermission ManageUsers = new(
         $"{ActionType.Manage} {Functions.Users}", // "Manage Users",
-        $"{Functions.Users}.{ActionType.Manage}", // "Users.Manage",
+        $"{Functions.Users}.{ActionType.Manage}", // "users.manage",
         Functions.UsersGroupName,
         Functions.UsersManageDes);
 
     /************* ROLE PERMISSIONS *************/
 
     public static readonly ApplicationPermission ReadRoles = new(
-        $"{ActionType.Read} {Functions.Roles}", // "View Roles",
+        $"{ActionType.Read} {Functions.Roles}", // "Read Roles",
         $"{Functions.Roles}.{ActionType.Read}", // "roles.view",
         Functions.RolesGroupName,
         Functions.RolesViewDes);
