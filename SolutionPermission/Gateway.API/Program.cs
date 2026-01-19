@@ -1,4 +1,6 @@
-﻿using Gateway.API.Extensions;
+﻿using Contracts.Constance;
+using Contracts.DependencyInjection;
+using Gateway.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,10 @@ builder.Services
 builder.Services.AddGatewayAuthentication(builder.Configuration);
 builder.Services.AddGatewayAuthorization();
 
+// ===== CORS from appsettings =====
+
+builder.Services.AddCorsContract(builder.Configuration);
+
 // ===== Swagger UI (dropdown downstream) =====
 builder.Services.AddGatewaySwagger(builder.Configuration);
 
@@ -20,11 +26,6 @@ var app = builder.Build();
 
 // Production headers / forward headers (nếu chạy sau Nginx/Ingress)
 app.UseForwardedHeaders();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
 
 // Swagger UI
 app.UseSwagger();
@@ -40,6 +41,10 @@ app.UseSwaggerUI(options =>
 });
 
 app.UseRouting();
+
+// ❗ THỨ TỰ BẮT BUỘC
+// ✅ CORS phải đứng TRƯỚC auth nếu bạn muốn preflight đi qua an toàn
+app.UseCors(SystemConst.SpaCors);
 
 app.UseAuthentication();
 app.UseAuthorization();

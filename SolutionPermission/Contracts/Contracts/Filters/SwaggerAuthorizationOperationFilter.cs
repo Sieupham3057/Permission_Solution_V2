@@ -2,7 +2,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Customer.API.AttributeAndFilters;
+namespace Contracts.Filters;
 
 public sealed class SwaggerAuthorizationOperationFilter : IOperationFilter
 {
