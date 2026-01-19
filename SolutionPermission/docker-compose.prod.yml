@@ -1,0 +1,35 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-CU14-ubuntu-22.04   # ví dụ pin rõ
+    container_name: sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+      MSSQL_PID: "Developer"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    restart: unless-stopped
+
+  customer-api:
+    image: registry.company.local/customer-api:1.0.3  # pin version
+    container_name: customer-api
+    depends_on:
+      - sqlserver
+    ports:
+      - "6868:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development #Should be Production
+      ConnectionStrings__DefaultConnectionString: ${DEFAULT_CONNECTION_STRING}
+    restart: unless-stopped
+
+volumes:
+  sqlserver_data:
+
+# ✅ Prod chỉ deploy image đã build từ CI.
+# "docker build -t registry.company.local/customer-api:1.0.3 -f Services/Customer/Customer.API/Dockerfile ."
+# Dev: build: + Dockerfile ✅
+# Prod: image: + tag/version cố định ✅
+# Không dùng latest cho app image ✅
+# Base image trong Dockerfile cũng pin ✅
