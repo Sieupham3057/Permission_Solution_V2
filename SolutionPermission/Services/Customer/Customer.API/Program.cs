@@ -22,6 +22,38 @@ builder.Services.Configure<AuthenticationOptions>(
 builder.Services.Configure<KeycloakOptions>(
     builder.Configuration.GetSection("Keycloak"));
 
+// ===== CORS from appsettings =====
+var corsSection = builder.Configuration.GetSection("Cors");
+
+var allowedOrigins = corsSection.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+var allowedMethods = corsSection.GetSection("AllowedMethods").Get<string[]>() ?? Array.Empty<string>();
+var allowedHeaders = corsSection.GetSection("AllowedHeaders").Get<string[]>() ?? Array.Empty<string>();
+var allowCredentials = corsSection.GetValue<bool>("AllowCredentials");
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SpaCors", policy =>
+    {
+        if (allowedOrigins.Length > 0)
+            policy.WithOrigins(allowedOrigins);
+        else
+            policy.AllowAnyOrigin(); // fallback (không khuyến nghị prod)
+
+        if (allowedMethods.Length > 0)
+            policy.WithMethods(allowedMethods);
+        else
+            policy.AllowAnyMethod();
+
+        if (allowedHeaders.Length > 0)
+            policy.WithHeaders(allowedHeaders);
+        else
+            policy.AllowAnyHeader();
+
+        if (allowCredentials)
+            policy.AllowCredentials();
+    });
+});
+
 // Add services to the container.
 
 // ================== MVC ==================
@@ -121,6 +153,8 @@ using (var scope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 // ❗ THỨ TỰ BẮT BUỘC
+// ✅ CORS phải đứng TRƯỚC auth nếu bạn muốn preflight đi qua an toàn
+app.UseCors("SpaCors");
 app.UseAuthentication();   // ❗ PHẢI CÓ
 app.UseAuthorization();
 
