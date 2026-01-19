@@ -14,7 +14,7 @@ public static class ServiceCollectionExtensions
     IConfiguration configuration)
     {
         services.AddDbContext<CustomerDbContext>(options =>
-        options.UseSqlServer(configuration.GetConnectionString("ConnectionStrings")));
+        options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString")));
 
         services.AddScoped<ICustomerRepository, CustomerRepository>();
 

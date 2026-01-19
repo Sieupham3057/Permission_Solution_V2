@@ -1,20 +1,31 @@
-version: '3.8'
-
 services:
-  sql2022:
+  sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sql2022
+    container_name: sqlserver
     ports:
       - "1433:1433"
     environment:
-      SA_PASSWORD: "123456a@"
       ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+      MSSQL_PID: "Developer"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    restart: unless-stopped
 
-  permissionapi:
-    image: trandongdocker/permission.api:latest
-    ports:
-      - "9000:8080"
+  customer-api:
+    build:
+      context: .
+      dockerfile: Services/Customer/Customer.API/Dockerfile
+    image: customer-api:dev   # tag local
+    container_name: customer-api
     depends_on:
-      - sql2022
+      - sqlserver
+    ports:
+      - "2323:8080"
     environment:
-      ConnectionStrings__ConnectionStrings: "Data Source=sql2022,1433;Initial Catalog=PermissionDB;User Id=sa;Password=123456a@;TrustServerCertificate=True"
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnectionString: ${DEFAULT_CONNECTION_STRING}
+    restart: unless-stopped
+
+volumes:
+  sqlserver_data:
