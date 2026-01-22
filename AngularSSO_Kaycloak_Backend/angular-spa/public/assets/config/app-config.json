@@ -1,0 +1,12 @@
+{
+  "gatewayBaseUrl": "https://localhost:7183",
+  "services": {
+    "customer-service": "/customer-service",
+    "product-service": "/product-service"
+  },
+  "keycloak": {
+    "url": "http://172.28.225.131:8080",
+    "realm": "company-dev",
+    "clientId": "angular-spa"
+  }
+}
